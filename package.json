@@ -1,0 +1,30 @@
+{
+  "name": "ws-app",
+  "version": "1.0.1",
+  "description": "ws-app for communication and notifications",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ws-server.js"
+  },
+  "keywords": [
+    "express",
+    "ejs",
+    "ws"
+  ],
+  "author": "Kushagra Gupta",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "sqlite3": "^5.0.2",
+    "uuid": "^8.3.2",
+    "ws": "^7.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
