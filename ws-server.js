@@ -1,5 +1,8 @@
 'use strict';
-
+var Store = require('./model/store');
+var User = require('./model/user');
+var { v4: uuid } = require('uuid');
+var SqlWrapper = require('./helpers/sqlite');
 var webSocketServer = require('ws').Server;
 var httpServer = require('http').createServer();
 var app = require('./http-server');
@@ -11,16 +14,51 @@ var ws = new webSocketServer({
 // mount the app
 httpServer.on('request', app);
 
-ws.on('connection', ws => {
+let store = new Store();
+let db = new SqlWrapper();
+
+ws.on('connection', wss => {
     console.log('new client connected');
 
-    ws.on('message', data => {
-        console.log(data);
+    wss.on('message', d => {
+        let data = JSON.parse(d);
+        // console.log(data);
+        switch (data['requestCode']) {
+            case 0:
+                // get user from db
+                try {
+                    db.open();
+                    let query = `SELECT * FROM users WHERE email="${data['user']['email']}";`;
+                    db.query(query, (err, rows) => {
+                        if (err) {
+                            db.close();
+                            console.log(err);
+                        }
+                        db.close();
+                        // console.log(rows);
+                        if (rows) {
+                            wss['clientId'] = uuid();
+                            let user = new User(wss['clientId'], data['user'], [], []);
+                            store.add({ client: wss, user });
+                            // console.log(store.getAll());
+                            wss.send(JSON.stringify({ clientId: wss['clientId'] }));
+                        }
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+                break;
 
-        ws.send(data.toUpperCase());
+            default:
+                break;
+        }
+
+        // wss.send(data.toUpperCase());
     });
 
-    ws.on('close', () => {
+    wss.on('close', () => {
+        store.remove(wss['clientId']);
+        // console.log(store.getAll());
         console.log('client disconnected');
     });
 });

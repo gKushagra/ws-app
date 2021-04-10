@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <%- include('partials/head') %>
+
+    <body>
+        <form action="/signup" method="post" name="signup">
+            <input type="email" placeholder="e.g. john@abc.com" name="email">
+            <input type="text" placeholder="e.g. @john, john, John Doe" name="name">
+            <input type="password" name="password">
+            <button type="submit">Sign Up</button>
+        </form>
+        <a href="http://localhost:6868/login">Login</a>
+
+        <%- include('partials/footer') %>
+    </body>
+
+</html>
