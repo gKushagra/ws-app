@@ -1,0 +1,20 @@
+.search {
+  position: relative;
+}
+
+.search__results {
+  /* margin: 8px 12px 12px 12px; */
+  padding: 12px 16px 12px 16px;
+  min-width: 200px;
+  min-height: 50px;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background-color: white;
+  border: 1px solid gainsboro;
+  border-radius: 5px;
+}
+
+#search-results {
+  display: none;
+}

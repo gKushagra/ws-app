@@ -49,6 +49,53 @@ ws.on('connection', wss => {
                 }
                 break;
 
+            case 1:
+                console.log(data['msg']);
+                wss.send(JSON.stringify({ msg: data['msg'] }));
+                break;
+
+            case 2:
+                console.log(data['search']);
+                try {
+                    let query = `SELECT userId,name FROM users WHERE name LIKE "${data['search']}%";`
+                    db.open();
+                    db.query(query, (err, rows) => {
+                        if (err) {
+                            db.close();
+                            console.log(err);
+                        }
+                        db.close();
+                        console.log(rows);
+                        if (rows) {
+                            wss.send(JSON.stringify({ searchResults: [rows] }));
+                        }
+                    })
+                } catch (error) {
+                    console.log(error);
+                }
+                break;
+
+            case 3:
+                console.log(data['user'], data['pair']);
+                // add new pair and send to client latest pairs
+                try {
+                    let query = `INSERT INTO pairs (pairId, userId, otherUserId) VALUES ("${uuid()}","${data['user']['userId']}","${data['pair']['userId']}");`
+                    db.open();
+                    db.cud(query, (err) => {
+                        if (err) {
+                            db.close();
+                            console.log(err);
+                        }
+
+                        db.close();
+                        store.get(wss['clientId'])['user'].addPair(data['pair']);
+                        wss.send(JSON.stringify({ pairs: [data['pair']] }));
+                    });
+                } catch (error) {
+                    console.log(error)
+                }
+                break;
+
             default:
                 break;
         }

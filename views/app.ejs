@@ -5,14 +5,22 @@
 
     <body>
         <%- include('partials/nav') %>
-
-        <h1>WS App: <%= sessionId %> </h1>
-        <p id="message"></p>
-
+        <hr>
+        <h1>WS App</h1>
+        <hr>
+        <!-- <p id="message"></p>
+        <button id="send-msg">Send Message</button>  -->
+        <h4>Contacts</h4>
+        <%- include('partials/contacts') %> 
+        <hr>
+        <h4>Conversation</h4>
+        <%- include('partials/pair') %> 
+        <hr>
         <%- include('partials/footer') %>
-
-        <%- include('partials/scripts') %>
+        <!-- user info and session id -->
         <div id="user" data-user=<%= data %> ></div>
+        <div id="sessionId" data-sid=<%= sessionId %> ></div>
+        <%- include('partials/scripts') %>
     </body>
 
 </html>
